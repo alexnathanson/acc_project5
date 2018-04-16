@@ -7,6 +7,10 @@ void ofApp::setup() {
 	//OF knows to load both your vert and frag shaders together
 	mShader.load("sphere/shader");
 
+	//ofLoadImage(mTex, "img.jpg");
+
+	ofLoadImage(mTex, "mercator.png");
+
 	ofBackground(0);
 	//could do a distance map thing to avoid a 2nd shader?
 	bShader.load("background/shader");
@@ -17,18 +21,12 @@ void ofApp::setup() {
 
 	mSphere.set(100.0f, 4);
 
-	// Point lights emit light in all directions //
-	// set the diffuse color, color reflected from the light source //
-	pointLight.setDiffuseColor(ofColor(0.f, 255.f, 0.f));
 
-	// specular color, the highlight/shininess color //
-	pointLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-	pointLight.setPosition(center.x, center.y, 0);
+	mTex.setTextureWrap(GL_NEAREST, GL_NEAREST);
+	mTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
+	mSphere.mapTexCoordsFromTexture(mTex);
 
-
-	lightColor.setBrightness(180.f);
-	lightColor.setSaturation(150.f);
-
+	ofDisableArbTex();
 
 }
 
@@ -40,12 +38,6 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	ofSetColor(255);
-
-	// enable lighting //
-	ofEnableLighting();
-	// the position of the light must be updated every frame, 
-	// call enable() so that it can update itself //
-	pointLight.enable();
 
 	// translate plane into center screen.
 	float tx = ofGetWidth() / 2;
@@ -82,11 +74,10 @@ void ofApp::draw() {
 
 	//mSphere.draw(OF_MESH_WIREFRAME);
 	mSphere.draw();
+	mTex.bind();
 	mShader.end();
 
 	//mCamera.end();
-
-	ofDisableLighting();
 
 	ofPopMatrix();
 

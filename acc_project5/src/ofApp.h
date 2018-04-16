@@ -35,10 +35,8 @@ public:
 
 	ofVec3f center;
 
-	ofLight pointLight;
-	ofColor lightColor;
-	float colorHue;
-	ofColor materialColor;
+	ofImage mImage;
+	ofTexture mTex;
 
 
 };
