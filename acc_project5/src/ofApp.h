@@ -21,22 +21,15 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
+	//sphere shader
 	ofShader mShader;
 
+	//background shader
 	ofShader bShader;
 
 	ofIcoSpherePrimitive mSphere;
 
-	ofLight light;
-
-	ofVec3f lightPos;
-
-	ofCamera mCamera;
-
-	ofVec3f center;
-
 	ofImage mImage;
 	ofTexture mTex;
-
 
 };

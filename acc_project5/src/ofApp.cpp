@@ -5,23 +5,19 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 
 	//OF knows to load both your vert and frag shaders together
-	mShader.load("sphere/shader");
+	mShader.load("shaders/sphere/shader");
 
-	//ofLoadImage(mTex, "img.jpg");
-
-	ofLoadImage(mTex, "mercator.png");
+	ofLoadImage(mTex, "images/mercator.png");
 
 	ofBackground(0);
 	//could do a distance map thing to avoid a 2nd shader?
-	bShader.load("background/shader");
+	bShader.load("shaders/background/shader");
 
 	ofEnableDepthTest();
 
-	ofEnableLighting();
+	mSphere.set(150.0f, 4);
 
-	mSphere.set(100.0f, 4);
-
-
+	//uncomment to use texture
 	mTex.setTextureWrap(GL_NEAREST, GL_NEAREST);
 	mTex.setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
 	mSphere.mapTexCoordsFromTexture(mTex);
@@ -37,17 +33,15 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofSetColor(255);
+	ofSetColor(255, 0, 0);
+
+	ofDrawBitmapString("a-b-c changes sphere. 1 2 3 changes background", 10, 20);
 
 	// translate plane into center screen.
 	float tx = ofGetWidth() / 2;
 	float ty = ofGetHeight() / 2;
 
 	bShader.begin();
-
-	// make light direction slowly rotate
-	//bShader.setUniform3f("lightDir", sin(ofGetElapsedTimef() / 10), cos(ofGetElapsedTimef() / 10), 0);
-	//bShader.setUniform1f("diffuse_value", 0.5);
 
 	bShader.setUniform1f("u_time", ofGetElapsedTimef());
 	bShader.setUniform2f("u_mouse", ofGetMouseX(), ofGetMouseY());
@@ -58,26 +52,21 @@ void ofApp::draw() {
 	ofPushMatrix();
 	ofTranslate(tx, ty, 250.0);
 
-	//mSphere.setMode(OF_PRIMITIVE_TRIANGLES);
-	//mCamera.begin();
-
-
 	mShader.begin();
 	mShader.setUniform1f("u_time", ofGetElapsedTimef());
 	mShader.setUniform2f("u_mouse", ofGetMouseX(), ofGetMouseY());
 	mShader.setUniform2f("u_resolution", ofGetWidth(), ofGetHeight());
-	mShader.setUniform3f("lightPos", lightPos);
 
-	float rotation = 360 - fmod(ofGetFrameNum(), 360.0);
+	float rotation = fmod(ofGetFrameNum() * 0.01, 360.0);
 	//ofLogNotice("rotation", ofToString(rotation));
-	ofRotateY(rotation);
+	//ofRotateY(rotation);
 
 	//mSphere.draw(OF_MESH_WIREFRAME);
 	mSphere.draw();
+	
+	//uncomment to use texture
 	mTex.bind();
 	mShader.end();
-
-	//mCamera.end();
 
 	ofPopMatrix();
 
@@ -85,9 +74,26 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-	if (key = 'r') {
-		mShader.load("sphere/shader");
-		bShader.load("background/shader");
+	
+	switch (key){
+	case '1':
+		mShader.load("shaders/sphere/shader");
+		break;
+	case '2':
+		mShader.load("shaders/sphere2/shader");
+		break;
+	case '3':
+		mShader.load("shaders/sphere2/shader");
+		break;
+	case 'a':
+		bShader.load("shaders/background/shader");
+		break;
+	case 'b':
+		bShader.load("shaders/background2/shader");
+		break;
+	case 'c':
+		bShader.load("shaders/background2/shader");
+		break;
 	}
 }
 
