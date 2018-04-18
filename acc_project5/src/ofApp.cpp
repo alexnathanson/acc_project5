@@ -33,9 +33,9 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofSetColor(255, 0, 0);
+	ofSetColor(0, 0, 0);
 
-	ofDrawBitmapString("a-b-c changes sphere. 1 2 3 changes background", 10, 20);
+	ofDrawBitmapString("a-b-c changes background. 1 2 3 changes sphere", 10, 20);
 
 	// translate plane into center screen.
 	float tx = ofGetWidth() / 2;
@@ -46,7 +46,50 @@ void ofApp::draw() {
 	bShader.setUniform1f("u_time", ofGetElapsedTimef());
 	bShader.setUniform2f("u_mouse", ofGetMouseX(), ofGetMouseY());
 	bShader.setUniform2f("u_resolution", ofGetWidth(), ofGetHeight());
-	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    
+    if(background){
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    }
+    /*repulusion shader*/
+    
+    //debShader.begin();
+    
+    // assign the value for range of repulsion
+     bShader.setUniform1f("range", 10);
+    
+    //make these stars dance!
+    float mx = (cos(ofGetElapsedTimef()*10.0))+ofGetWidth()/2;
+    float my = (cos(ofGetElapsedTimef()*3.0))+ofGetHeight()/2;
+    
+    //push star position into shader
+    bShader.setUniform2f("starMovement", mx, my);
+    
+    float percentX = mouseX / (float)ofGetWidth();
+    percentX = ofClamp(percentX, 0, 1);
+    
+    
+    //creating colors mapped to mouse
+    ofFloatColor colorOne = ofColor(25,255,251);
+    ofFloatColor colorTwo = ofColor(155,25,255);
+    ofFloatColor colorNew = colorOne.getLerped(colorTwo, percentX);
+    
+    float mouseColor[4] = {colorNew.r, colorNew.g, colorNew.b, colorNew.a};
+    
+    bShader.setUniform4fv("mouseColor", &mouseColor[0]);
+    
+    if(background3) {
+    
+        for(int i = 0; i<100; i++){
+            for( int k = 0; k <100; k++){
+                ofDrawEllipse(i*20, k*20, 2, 2);
+                }
+            }
+    }
+    
+    //debShader.end();
+    
+    
+    
 	bShader.end();
 
 	ofPushMatrix();
@@ -87,12 +130,16 @@ void ofApp::keyPressed(int key) {
 		break;
 	case 'a':
 		bShader.load("shaders/background/shader");
+             background = true;
 		break;
 	case 'b':
 		bShader.load("shaders/background2/shader");
+             background = true;
 		break;
 	case 'c':
-		bShader.load("shaders/background2/shader");
+		bShader.load("shaders/background3/shader");
+             background3 = true;
+             background = false;
 		break;
 	}
 }

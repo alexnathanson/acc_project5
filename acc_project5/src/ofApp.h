@@ -31,5 +31,8 @@ public:
 
 	ofImage mImage;
 	ofTexture mTex;
+    
+    bool background = true;
+    bool background3;
 
 };
