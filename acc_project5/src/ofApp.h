@@ -29,10 +29,16 @@ public:
 
 	ofIcoSpherePrimitive mSphere;
 
-	ofImage mImage;
+    ofImage eye;
+    int updateCounter = 0;
+    int eyeIndex = 1;
+    bool davShaderOn = false;
 	ofTexture mTex;
     
     bool background = true;
     bool background3;
+    
+    
+    
 
 };
